@@ -1,0 +1,29 @@
+WorkFlow
+
+Visit priceline www.priceline.com
+Click Flights
+round trip already selected
+Enter Atlanta Departing from for all
+Enter Going to For different destinations
+
+    *Cancun
+    *Las Vegas
+    *Denver
+    *Rome
+    *Milan
+    *Paris
+    *Madrid
+    *Amsterdam
+    *Singapore
+
+Grab Dates from calendar May 1st - August 15 7 day stay
+cabin class already selected
+Submit by hitting find your flight button
+uncheck nonstop
+get cost of flights (maybe insert in db)
+check nonstop and uncheck 1/2 stops
+get cost of flights(maybe insert in db)
+retrieve info from db and find interval that has the cheapest price
+
+**repeat process for next window of dates**
+
