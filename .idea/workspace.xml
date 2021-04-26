@@ -84,6 +84,10 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="JUnit.FlightDataAutomationTest" />
+      <item itemvalue="JUnit.FlightDataAutomationTest.doSomething" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.FlightDataAutomationTest.doSomething" />
