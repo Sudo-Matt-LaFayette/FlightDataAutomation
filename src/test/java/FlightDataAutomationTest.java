@@ -65,8 +65,14 @@ public class FlightDataAutomationTest {
         // This takes you to the next page
         findYourFlightButton.click();
 
+        WebElement cost = driver.findElement(By.cssSelector("#root > div > div > div.Box-sc-8h3cds-0.Flex-sc-1ydst80-0.ListingsPagestyles__ListingsBody-sc-14lhci9-3.eHXvgJ > div.ListingsPagestyles__Middle-sc-14lhci9-5.chVbqz > div > div > div > div:nth-child(7) > div > div.ContentRenderer__StyledListingsWrapper-sc-1wxjt68-1.dUPnlT > section > ul > li:nth-child(1) > div > div.Box-sc-8h3cds-0.Flex-sc-1ydst80-0.RetailItinerary__RelativeFlex-sc-5exnm5-5.gXRUkZ > div.Box-sc-8h3cds-0.Flex-sc-1ydst80-0.RetailItinerary__FareBrandBoxWrapper-sc-5exnm5-4.idxSbf > div > div.Box-sc-8h3cds-0.Flex-sc-1ydst80-0.FareBrandBox__LargerCentered-sc-1kqgbid-2.ikvFGs > div > div > div"));
+        String costString = cost.getText().replace("$","");
+        double costOfFlight = Double.parseDouble(costString);
+
+
         // After you click the submit button theses objects are visible..
         TripResults tr = new TripResults(driver);
+
     }
 
 }
