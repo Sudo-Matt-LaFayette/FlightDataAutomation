@@ -5,8 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4a6925af-5c0b-4dee-ab61-7d3e55822032" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/LowestPriceInArray.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FlightDataAutomation.iml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,16 +43,7 @@
     <property name="project.structure.side.proportion" value="0.2787015" />
     <property name="settings.editor.selected.configurable" value="preferences.fileTypes" />
   </component>
-  <component name="RunManager" selected="JUnit.FlightDataAutomationTest.doSomething">
-    <configuration default="true" type="Application" factoryName="Application">
-      <option name="ALTERNATIVE_JRE_PATH" value="corretto-11" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
-      <option name="MAIN_CLASS_NAME" value="FlightDataAutomation" />
-      <module name="FlightDataAutomation" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="JUnit.FlightDataAutomationTest">
     <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
@@ -61,6 +53,15 @@
       <option name="TEST_OBJECT" value="CLASS" />
       <properties />
       <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="corretto-11" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="FlightDataAutomation" />
+      <module name="FlightDataAutomation" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -86,8 +87,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.FlightDataAutomationTest.doSomething" />
         <item itemvalue="JUnit.FlightDataAutomationTest" />
+        <item itemvalue="JUnit.FlightDataAutomationTest.doSomething" />
       </list>
     </recent_temporary>
   </component>
@@ -132,5 +133,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Basic project structure, skeleton files" />
     <option name="LAST_COMMIT_MESSAGE" value="Basic project structure, skeleton files" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/FlightDataAutomation$FlightDataAutomationTest.ic" NAME="FlightDataAutomationTest Coverage Results" MODIFIED="1619371769051" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>
