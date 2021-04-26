@@ -33,8 +33,7 @@ public class FlightDataAutomationTest {
     public static void setUpChrome() {
         System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
         driver = new ChromeDriver();
-        driver.get("https://www.priceline.com/m/fly/search/ATL-CUN-20210508/CUN-ATL-20210529/?cabin-class=ECO&no-date-search=false&num-adults=1&sbsroute=slice1&search-type=0000&vrid=8f256b28ca97e70f3e23ba9c391e783e");
-
+        driver.get("www.priceline.com");
         // Visible on home page... so I'm declaring here
         //flightsTab = driver.findElement(By.xpath("/html/body/div[1]/div/div[2]/div[1]/div[1]/div/div[1]/div[3]/div[2]"));
     }
