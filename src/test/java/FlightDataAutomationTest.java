@@ -1,5 +1,7 @@
-import WebObjects.FlightTabObjects;
+//import WebObjects.FlightTabObjects;
 import WebObjects.TripResults;
+
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.*;
@@ -15,7 +17,8 @@ import java.time.Duration;
 import java.util.Date;
 import java.util.List;
 
-import static WebObjects.FlightTabObjects.*;
+//import static WebObjects.FlightTabObjects.*;
+
 
 
 public class FlightDataAutomationTest {
