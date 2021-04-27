@@ -1,26 +1,18 @@
-import WebObjects.Flight;
-import WebObjects.FlightTabObjects;
-import WebObjects.TripResults;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.util.ArrayList;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.*;
+import java.awt.*;
 import java.util.List;
 
-import static WebObjects.FlightTabObjects.*;
+
 
 
 public class FlightDataAutomationTest {
 
     public static WebDriver driver;
-    public static WebElement flightsTab;
 
     // Dates in the Calendar
     public static List<WebElement> dateSelection;
@@ -28,77 +20,125 @@ public class FlightDataAutomationTest {
     // Titles of the Month (May 2021, June 2021, etc)
     public static List<WebElement> calendarTitles;
 
+    public static List<WebElement> monthBox;
+
+    public static WebElement nextMonthCalendarArrow;
+
 
     @BeforeClass
     public static void setUpChrome() {
         System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
+
+        ChromeOptions options = new ChromeOptions();
+        //options.addArguments("--incognito");
+
         driver = new ChromeDriver();
-        driver.get("www.priceline.com");
-        // Visible on home page... so I'm declaring here
-        //flightsTab = driver.findElement(By.xpath("/html/body/div[1]/div/div[2]/div[1]/div[1]/div/div[1]/div[3]/div[2]"));
+        driver.get("https://hotwire.com");
     }
 
 
     @Test
-    public void doSomething() throws InterruptedException {
-        List<Flight> flightDetails = new ArrayList<Flight>();
-        // Get to the right place
-        flightsTab.click();
+    public void doSomething() throws InterruptedException, AWTException {
 
-         //Now the Flight Tab objects are visible... so we declare this object
-        FlightTabObjects p = new FlightTabObjects(driver);
+        // Array of places to go
+        String[] destination = new String[]{
+                "Cancun",
+                "Las Vegas",
+                "Denver",
+                "Rome",
+                "Milan",
+                "Paris",
+                "Madrid",
+                "Amsterdam",
+                "Singapore"
+        };
 
-        departingFromBox.sendKeys("Matt");
-        departureDatePicker.click();
+        int startDay = 0;
+        int endDay = 0;
 
-         //(dateSelection & calendarTitles) need to be declared inside the testcase...
-        //they only become visible after the departureDatePicker is clicked...
-        dateSelection = driver.findElements(By.className("bpiqYf"));
-        calendarTitles = driver.findElements(By.className("ffqzcs"));
+        for (int x = 0; x < 1; x++) {//destination.length; x++) {
+            // Get to the right place
+            WebElement flightsTab = driver.findElement(By.xpath("/html/body/div[1]/div[2]/div[1]/meso-native-marquee/div[1]/div/div/div/div/div[2]/div[3]"));
 
-        // Need to interate through these, find the approiate child elements and pick the dates you want....
 
-        for (WebElement x: calendarTitles) {
-            System.out.println(x.getText());
-            if (x.getText().equals("May 2021")) {
-                // This doesn't work... still prints all dates in the calendar...
-                for (WebElement e: dateSelection) {
-                    System.out.println(e.getText());
-                }
+            flightsTab.click();
+            Thread.sleep(500);
+
+            WebElement flyFrom = driver.findElement(By.xpath("/html/body/div[1]/div[2]/div[1]/meso-native-marquee/div[1]/div/div/div/div/div[3]/form/div[2]/div/div[1]/input"));
+
+            flyFrom.clear();
+            flyFrom.sendKeys("Atlanta, GA, United States of America (ATL-Hartsfield-Jackson Atlanta Intl.)");
+            Thread.sleep(500);
+            flyFrom.sendKeys(Keys.ARROW_DOWN);
+            flyFrom.sendKeys(Keys.ENTER);
+
+            WebElement flyTo = driver.findElement(By.xpath("/html/body/div[1]/div[2]/div[1]/meso-native-marquee/div[1]/div/div/div/div/div[3]/form/div[3]/div/div/input"));
+
+            // Send to each place in our list
+            flyTo.sendKeys(destination[x]);
+            Thread.sleep(2000);
+            flyTo.sendKeys(Keys.ENTER);
+
+            // DO WHATEVER FOR THE DATE THING
+            WebElement departingDate = driver.findElement(By.xpath("/html/body/div[1]/div[2]/div[1]/meso-native-marquee/div[1]/div/div/div/div/div[3]/form/div[4]/div/div/div/div/div[1]/div[2]"));
+            departingDate.click();
+
+            // do some condition to check what months show... if the right one isn't in the 2nd positon then click the next arrow...
+
+            // I can only see the 2nd month in the calendar??
+            List <WebElement> nextMonth = driver.findElements(By.cssSelector("div.month:nth-child(3)"));
+
+
+            String month = nextMonth.get(0).findElement(By.xpath("/html/body/div[1]/div[2]/div[1]/meso-native-marquee/div[1]/div/div/div/div/div[3]/form/div[4]/div/div/div/span/span[2]/div/div[2]/div[2]/div/div[1]/h4")).getText();
+
+            System.out.println(month);
+
+            List <WebElement> days = nextMonth.get(0).findElements(By.className("day-availability__content"));
+
+            if (x == 0) {
+                startDay = 1;
+                // make the end day one less then you want it to be... werid bug?
+                endDay = 6;
             }
+            else {
+                startDay += x;
+                endDay += x;
+            }
+
+            if (month.equals("April 2021")) {
+                System.out.println("You're on the right track!");
+
+                for (WebElement dayContainer: days) {
+                    // If we've found the first day... click on it along with the last day
+                    if (dayContainer.getText().equals(String.valueOf(startDay))) {
+                        dayContainer.click();
+                        Thread.sleep(2000);
+                        days.get(endDay).click();
+                        break;
+                    }
+                }
+
+                System.out.println("I need to make sure it gets here....");
+
+            }
+
+            Thread.sleep(5000);
+
+
+            // Click find a flight
+            WebElement findAFlightButton = driver.findElement(By.cssSelector(".hw-btn"));
+            findAFlightButton.click();
+
+            // need to wait a while for page to load
+            // should be 10 seconds...
+            Thread.sleep(10000);
+
+            WebElement bestResultRow = new WebDriverWait(driver, Long.valueOf(10))
+                    .until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div[2]/div[11]/section/div/div[13]/ul/li[1]/div[1]")));
+
+
+//            WebElement hotwireLogo = driver.findElement(By.xpath("/html/body/div[2]/div[1]/a"));
+//            hotwireLogo.click();
         }
-
-        // This takes you to the next page
-        findYourFlightButton.click();
-
-        //makes it wait till page loads
-        WebDriverWait wait = new WebDriverWait(driver, 20);
-        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("#root > div > div > div.Box-sc-8h3cds-0.Flex-sc-1ydst80-0.ListingsPagestyles__ListingsBody-sc-14lhci9-3.eHXvgJ > div.ListingsPagestyles__Middle-sc-14lhci9-5.chVbqz > div > div > div > div:nth-child(4) > div > div.ContentRenderer__StyledListingsWrapper-sc-1wxjt68-1.dUPnlT > section > ul > li:nth-child(1) > div")));
-       //gets the airline name
-        WebElement airlineElement = driver.findElement(By.cssSelector("#root > div > div > div.Box-sc-8h3cds-0.Flex-sc-1ydst80-0.ListingsPagestyles__ListingsBody-sc-14lhci9-3.eHXvgJ > div.ListingsPagestyles__Middle-sc-14lhci9-5.chVbqz > div > div > div > div:nth-child(4) > div > div.ContentRenderer__StyledListingsWrapper-sc-1wxjt68-1.dUPnlT > section > ul > li:nth-child(1) > div > div.Box-sc-8h3cds-0.Flex-sc-1ydst80-0.RetailItinerary__RelativeFlex-sc-5exnm5-5.gXRUkZ > div.Box-sc-8h3cds-0.RetailItinerary__SliceDetailsWrapper-sc-5exnm5-3.jAkZXc > div > div > div.Box-sc-8h3cds-0.SliceDisplay__AirlineWrapper-sc-1r9j249-4.iUmPcq > div.Text-sc-1c7ae3w-0.SliceDisplay__AirlineText-sc-1r9j249-6.emTubu"));
-        String airline = airlineElement.getText();
-        System.out.println(airline);
-        //gets the dollars of the ticket cost
-        WebElement costElementDollars = driver.findElement(By.cssSelector("#root > div > div > div.Box-sc-8h3cds-0.Flex-sc-1ydst80-0.ListingsPagestyles__ListingsBody-sc-14lhci9-3.eHXvgJ > div.ListingsPagestyles__Middle-sc-14lhci9-5.chVbqz > div > div > div > div:nth-child(4) > div > div.ContentRenderer__StyledListingsWrapper-sc-1wxjt68-1.dUPnlT > section > ul > li:nth-child(1) > div > div.Box-sc-8h3cds-0.Flex-sc-1ydst80-0.RetailItinerary__RelativeFlex-sc-5exnm5-5.gXRUkZ > div.Box-sc-8h3cds-0.Flex-sc-1ydst80-0.RetailItinerary__FareBrandBoxWrapper-sc-5exnm5-4.cyFmxQ > div > div.Box-sc-8h3cds-0.Flex-sc-1ydst80-0.FareBrandBox__LargerCentered-sc-1kqgbid-2.ikvFGs > div > div > div > div.Text-sc-1c7ae3w-0.fKzJka"));
-        String costDollars = costElementDollars.getText();
-        //get the cents of the ticket cost
-        WebElement costElementCents = driver.findElement(By.cssSelector("#root > div > div > div.Box-sc-8h3cds-0.Flex-sc-1ydst80-0.ListingsPagestyles__ListingsBody-sc-14lhci9-3.eHXvgJ > div.ListingsPagestyles__Middle-sc-14lhci9-5.chVbqz > div > div > div > div:nth-child(4) > div > div.ContentRenderer__StyledListingsWrapper-sc-1wxjt68-1.dUPnlT > section > ul > li:nth-child(1) > div > div.Box-sc-8h3cds-0.Flex-sc-1ydst80-0.RetailItinerary__RelativeFlex-sc-5exnm5-5.gXRUkZ > div.Box-sc-8h3cds-0.Flex-sc-1ydst80-0.RetailItinerary__FareBrandBoxWrapper-sc-5exnm5-4.cyFmxQ > div > div.Box-sc-8h3cds-0.Flex-sc-1ydst80-0.FareBrandBox__LargerCentered-sc-1kqgbid-2.ikvFGs > div > div > div > div.Box-sc-8h3cds-0.Hide-sc-16m85mi-0.iXQlrW > div"));
-        String costCents = costElementCents.getText();
-        //concatinates the dollars and cents
-        String cost = costDollars + costCents;
-        //converts into double
-        double costOfFlight = Double.parseDouble(cost);
-        System.out.println(costOfFlight);
-        //creates a new Flight object with date as temp empty string
-        //Dont know how to grab the date yet maybe *Matt* cant help..
-        flightDetails.add(new Flight(airline, costOfFlight,""));
-
-
-
-
-         //After you click the submit button theses objects are visible..
-        TripResults tr = new TripResults(driver);
-
     }
-
 }
