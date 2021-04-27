@@ -17,7 +17,7 @@ public class FlightTabObjects {
     public FlightTabObjects(WebDriver driver) {
 
         // Departing from box
-        departingFromBox = driver.findElement(By.cssSelector("#flights\\.0\\.startLocation-typeahead-input"));
+        departingFromBox = driver.findElement(By.xpath("//*[@id=\"flights.0.startLocation-typeahead-input\"]"));
 
         // Round trip radio
         roundTripRadioButton = driver.findElement(By.cssSelector("#flight-type-round-trip"));
@@ -26,13 +26,13 @@ public class FlightTabObjects {
         oneWayRadioButton = driver.findElement(By.cssSelector("#flight-type-one-way"));
 
         // Going to box
-        goingToInputBox = driver.findElement(By.cssSelector("#flights\\.0\\.endLocation-typeahead-input"));
+        goingToInputBox = driver.findElement(By.id("flights.0.endLocation-typeahead-input"));
 
         // Calendar Departure Date Picker
         departureDatePicker = driver.findElement(By.cssSelector("#flight-date-range-0"));
 
         // Find your flight button
-        findYourFlightButton = driver.findElement(By.cssSelector(".sc-chPdSV"));
+        findYourFlightButton = driver.findElement(By.className("dfGnlS"));
     }
 
 }
