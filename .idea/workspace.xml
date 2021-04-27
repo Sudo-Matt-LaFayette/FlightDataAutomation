@@ -6,10 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="4a6925af-5c0b-4dee-ab61-7d3e55822032" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/WebObjects/FlightTabObjects.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/FlightDataAutomationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/FlightDataAutomationTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/WebObjects/FlightTabObjects.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/FlightDataAutomationTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/FlightDataAutomationTest.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
