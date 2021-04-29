@@ -3,11 +3,10 @@ import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.*;
 import java.awt.*;
 import java.util.List;
-
-
 
 
 public class FlightDataAutomationTest {
@@ -19,81 +18,62 @@ public class FlightDataAutomationTest {
 
     // Titles of the Month (May 2021, June 2021, etc)
     public static List<WebElement> calendarTitles;
-
     public static List<WebElement> monthBox;
-
     public static WebElement nextMonthCalendarArrow;
-
 
     @BeforeClass
     public static void setUpChrome() {
         System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
-
         ChromeOptions options = new ChromeOptions();
         //options.addArguments("--incognito");
-
         driver = new ChromeDriver();
-        driver.get("https://hotwire.com");
+        driver.get("https://www.cheaptickets.com/");
     }
-
-
+    
     @Test
     public void doSomething() throws InterruptedException, AWTException {
 
         // Array of places to go
-        String[] destination = new String[]{
-                "Cancun",
-                "Las Vegas",
-                "Denver",
-                "Rome",
-                "Milan",
-                "Paris",
-                "Madrid",
-                "Amsterdam",
-                "Singapore"
-        };
+        String[] destination = new String[]{ "Cancun", "Las Vegas", "Denver", "Rome", "Milan", "Paris", "Madrid", "Amsterdam", "Singapore" };
 
         int startDay = 0;
         int endDay = 0;
 
         for (int x = 0; x < 1; x++) {//destination.length; x++) {
             // Get to the right place
-            WebElement flightsTab = driver.findElement(By.xpath("/html/body/div[1]/div[2]/div[1]/meso-native-marquee/div[1]/div/div/div/div/div[2]/div[3]"));
-
+            WebElement flightsTab = driver.findElement(By.xpath("/html/body/div[1]/div[1]/div/div[1]/div/div[1]/div[1]/div/figure/div[3]/div/div/ul/li[2]/a"));
 
             flightsTab.click();
             Thread.sleep(500);
 
-            WebElement flyFrom = driver.findElement(By.xpath("/html/body/div[1]/div[2]/div[1]/meso-native-marquee/div[1]/div/div/div/div/div[3]/form/div[2]/div/div[1]/input"));
+            WebElement leavingFrom = driver.findElement(By.xpath("/html/body/div[1]/div[1]/div/div[1]/div/div[1]/div[1]/div/figure/div[3]/div/div/div/div[2]/div/form/div[2]/div/div[1]/div[2]/div[1]/div/div[1]/div/div/div/div/div[1]/button"));
+            leavingFrom.click();
 
-            flyFrom.clear();
-            flyFrom.sendKeys("Atlanta, GA, United States of America (ATL-Hartsfield-Jackson Atlanta Intl.)");
-            Thread.sleep(500);
-            flyFrom.sendKeys(Keys.ARROW_DOWN);
-            flyFrom.sendKeys(Keys.ENTER);
+            // Weird bug where it doesn't take the first input?
+            leavingFrom.sendKeys("A");
+            Thread.sleep(1000);
+            leavingFrom.sendKeys("Atlanta (ATL - Hartsfield-Jackson Atlanta Intl.)");
+            Actions a = new Actions(driver);
+            a.sendKeys(Keys.ENTER).perform();
 
-            WebElement flyTo = driver.findElement(By.xpath("/html/body/div[1]/div[2]/div[1]/meso-native-marquee/div[1]/div/div/div/div/div[3]/form/div[3]/div/div/input"));
+            // Don't know why... but there's a button you need to press before the fly to element becomes visible?
+            WebElement goingToButton = driver.findElement(By.xpath("/html/body/div[1]/div[1]/div/div[1]/div/div[1]/div[1]/div/figure/div[3]/div/div/div/div[2]/div/form/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div/div/div/div/div[1]/button"));
+            goingToButton.click();
 
             // Send to each place in our list
+            WebElement flyTo = driver.findElement(By.xpath("//*[@id=\"location-field-leg1-destination\"]"));
             flyTo.sendKeys(destination[x]);
-            Thread.sleep(2000);
-            flyTo.sendKeys(Keys.ENTER);
+            Thread.sleep(1000);
+            a.sendKeys(Keys.ENTER).perform();
+
+            // This opens the calendar
+            WebElement departingButton = driver.findElement(By.xpath("//*[@id=\"d1-btn\"]"));
+            departingButton.click();
 
             // DO WHATEVER FOR THE DATE THING
-            WebElement departingDate = driver.findElement(By.xpath("/html/body/div[1]/div[2]/div[1]/meso-native-marquee/div[1]/div/div/div/div/div[3]/form/div[4]/div/div/div/div/div[1]/div[2]"));
-            departingDate.click();
-
-            // do some condition to check what months show... if the right one isn't in the 2nd positon then click the next arrow...
-
-            // I can only see the 2nd month in the calendar??
-            List <WebElement> nextMonth = driver.findElements(By.cssSelector("div.month:nth-child(3)"));
-
-
-            String month = nextMonth.get(0).findElement(By.xpath("/html/body/div[1]/div[2]/div[1]/meso-native-marquee/div[1]/div/div/div/div/div[3]/form/div[4]/div/div/div/span/span[2]/div/div[2]/div[2]/div/div[1]/h4")).getText();
-
-            System.out.println(month);
-
-            List <WebElement> days = nextMonth.get(0).findElements(By.className("day-availability__content"));
+            List <WebElement> month = driver.findElements(By.className("uitk-new-date-picker-month"));
+            WebElement monthName = driver.findElement(By.xpath("/html/body/div[1]/div[1]/div/div[1]/div/div[1]/div[1]/div/figure/div[3]/div/div/div/div[2]/div/form/div[2]/div/div[1]/div[2]/div[2]/div/div/div[1]/div/div[2]/div/div[2]/div[2]/div[1]/h2"));
+            List <WebElement> days = month.get(0).findElements(By.className("uitk-new-date-picker-day"));
 
             if (x == 0) {
                 startDay = 1;
@@ -105,12 +85,12 @@ public class FlightDataAutomationTest {
                 endDay += x;
             }
 
-            if (month.equals("April 2021")) {
+            if (monthName.getText().equals("May 2021")) {
                 System.out.println("You're on the right track!");
 
                 for (WebElement dayContainer: days) {
                     // If we've found the first day... click on it along with the last day
-                    if (dayContainer.getText().equals(String.valueOf(startDay))) {
+                    if (dayContainer.getAttribute("data-day").equals(String.valueOf(startDay))) {
                         dayContainer.click();
                         Thread.sleep(2000);
                         days.get(endDay).click();
@@ -118,27 +98,19 @@ public class FlightDataAutomationTest {
                     }
                 }
 
-                System.out.println("I need to make sure it gets here....");
+                // Closes the calendar
+                WebElement doneButton = driver.findElement(By.cssSelector("#wizard-flight-tab-roundtrip > div.uitk-layout-grid.uitk-layout-grid-gap-three.uitk-layout-grid-columns-small-4.uitk-layout-grid-columns-medium-6.uitk-layout-grid-columns-large-12.uitk-spacing.uitk-spacing-padding-block-three > div.uitk-layout-grid-item.uitk-layout-grid-item-columnspan-small-4.uitk-layout-grid-item-columnspan-medium-6.uitk-layout-grid-item-columnspan-large-4 > div > div > div:nth-child(1) > div > div.uitk-date-picker-menu-container.uitk-date-picker-menu-container-double.uitk-menu-container.uitk-menu-open.uitk-menu-pos-left.uitk-menu-container-autoposition.uitk-menu-container-text-nowrap > div > div.uitk-flex.uitk-date-picker-menu-footer > button"));
+                doneButton.click();
 
+                System.out.println("I need to make sure it gets here....");
             }
 
-            Thread.sleep(5000);
+            // Click search button and go to next page
+            WebElement searchButton = driver.findElement(By.xpath("/html/body/div[1]/div[1]/div/div[1]/div/div[1]/div[1]/div/figure/div[3]/div/div/div/div[2]/div/form/div[3]/div[2]/button"));
+            searchButton.click();
 
-
-            // Click find a flight
-            WebElement findAFlightButton = driver.findElement(By.cssSelector(".hw-btn"));
-            findAFlightButton.click();
-
-            // need to wait a while for page to load
-            // should be 10 seconds...
-            Thread.sleep(10000);
-
-            WebElement bestResultRow = new WebDriverWait(driver, Long.valueOf(10))
-                    .until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div[2]/div[11]/section/div/div[13]/ul/li[1]/div[1]")));
-
-
-//            WebElement hotwireLogo = driver.findElement(By.xpath("/html/body/div[2]/div[1]/a"));
-//            hotwireLogo.click();
+            // Sleep for 15 seconds
+            Thread.sleep(15000);
         }
     }
 }
