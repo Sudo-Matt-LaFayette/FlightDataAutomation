@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4a6925af-5c0b-4dee-ab61-7d3e55822032" name="Default Changelist" comment="Basic project structure, skeleton files">
-      <change beforePath="$PROJECT_DIR$/src/main/java/LowestPriceInArray.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/LowestPriceInArray.java" afterDir="false" />
-    </list>
+    <list default="true" id="4a6925af-5c0b-4dee-ab61-7d3e55822032" name="Default Changelist" comment="Basic project structure, skeleton files" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
