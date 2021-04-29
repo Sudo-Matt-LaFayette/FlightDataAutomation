@@ -1,12 +1,16 @@
+import org.apache.commons.io.FileUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 public class FlightDataAutomationTest {
@@ -29,9 +33,9 @@ public class FlightDataAutomationTest {
         driver = new ChromeDriver();
         driver.get("https://www.cheaptickets.com/");
     }
-    
+
     @Test
-    public void doSomething() throws InterruptedException, AWTException {
+    public void doSomething() throws InterruptedException, AWTException, IOException {
 
         // Array of places to go
         String[] destination = new String[]{ "Cancun", "Las Vegas", "Denver", "Rome", "Milan", "Paris", "Madrid", "Amsterdam", "Singapore" };
@@ -111,6 +115,31 @@ public class FlightDataAutomationTest {
 
             // Sleep for 15 seconds
             Thread.sleep(15000);
+
+            //waits till page loads
+            driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+            //find the airline
+            WebElement airLineElement = driver.findElement(By.xpath("//*[@id=\"flight-module-2021-05-01t15:26:00-04:00-coach-atl-clt-aa-5690-coach-clt-cun-aa-2713_2021-05-07t15:41:00-05:00-coach-cun-mco-f9-30-coach-mco-atl-f9-1011_\"]/div[1]/div[2]/div[1]/div/div/div/div[1]/div[2]/span"));
+            //gets the text from the element
+            String airline = airLineElement.getText();
+            //prints out airline name
+            System.out.println(airline);
+            //finds the price
+            WebElement priceElement = driver.findElement(By.cssSelector("#flight-module-2021-05-01t15\\:26\\:00-04\\:00-coach-atl-clt-aa-5690-coach-clt-cun-aa-2713_2021-05-07t15\\:41\\:00-05\\:00-coach-cun-mco-f9-30-coach-mco-atl-f9-1011_ > div.grid-container.standard-padding > div.uitk-grid.all-grid-fallback-alt > div.uitk-col.all-col-shrink > div > div.uitk-col.price-details-container.all-col-fill > div.primary-content.urgency.custom-primary-padding > span.full-bold.no-wrap"));
+            //gets text and removes $
+            String priceString = priceElement.getText().replace("$", "");
+            //converts to int
+            int price = Integer.parseInt(priceString);
+            //prints price
+            System.out.println(price);
+            //Grabs the destination
+            WebElement destinationElement = driver.findElement(By.cssSelector("#titleBar > h1 > div > span.title-city-text"));
+            //gets text from title and removes words to only get destination
+            String finalDestination = destinationElement.getText().replace("Select your departure to ", "");
+            //prints
+            System.out.println(finalDestination);
+            String line = finalDestination + "," + airline + "," + price;
+            FileUtils.writeStringToFile(new File("flightresults.txt"),line, StandardCharsets.UTF_8);
         }
     }
 }
