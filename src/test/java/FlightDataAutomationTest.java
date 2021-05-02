@@ -376,7 +376,7 @@ public class FlightDataAutomationTest {
 
     public int getNumTimesToRunForMonth() {
         String currentMonth = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
-        int daysInMonth = calendar.getMaximum(calendar.get(Calendar.DAY_OF_MONTH));
+        int daysInMonth = calendar.getMaximum(Calendar.DAY_OF_MONTH);
         System.out.println("\n**The month is " + currentMonth + " and I am running the loop "  + daysInMonth + " times**\n\n");
         return daysInMonth;
     }
