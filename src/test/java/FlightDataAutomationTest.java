@@ -72,7 +72,7 @@ public class FlightDataAutomationTest {
             Thread.sleep(500);
 
             // Leaving from box
-            leavingFrom = driver.findElement(By.xpath("/html/body/div[1]/div[1]/div/div[1]/div/div[1]/div[1]/div/figure/div[3]/div/div/div/div[2]/div/form/div[2]/div/div[1]/div[2]/div[1]/div/div[1]/div/div/div/div/div[1]/button"));
+            WebElement leavingFrom = driver.findElement(By.xpath("/html/body/div[1]/div[1]/div/div[1]/div/div[1]/div[1]/div/figure/div[3]/div/div/div/div[2]/div/form/div[2]/div/div[1]/div[2]/div[1]/div/div[1]/div/div/div/div/div[1]/button"));
             leavingFrom.click();
 
             // Weird bug where it doesn't take the first input?
