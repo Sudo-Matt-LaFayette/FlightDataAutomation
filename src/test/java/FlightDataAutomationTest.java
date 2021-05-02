@@ -1,7 +1,4 @@
-import WebObjects.FlightTabObjects;
 import org.apache.commons.io.FileUtils;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.*;
@@ -17,7 +14,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+
 import static WebObjects.FlightTabObjects.*;
 
 
@@ -33,6 +30,7 @@ public class FlightDataAutomationTest {
     public static List<WebElement> calendarTitles;
     public static List<WebElement> monthBox;
     public static WebElement nextMonthCalendarArrow;
+    public static Calendar calendar;
 
 
 
@@ -59,15 +57,18 @@ public class FlightDataAutomationTest {
         String[] destination = new String[]{"Cancun", "Las Vegas", "Denver", "Rome", "Milan", "Paris", "Madrid", "Amsterdam", "Singapore"};
         WebElement flightsTab = driver.findElement(By.xpath("/html/body/div[1]/div[1]/div/div[1]/div/div[1]/div[1]/div/figure/div[3]/div/div/ul/li[2]/a"));
 
-        int startDay = 0;
-        int endDay = 0;
+        int startDay = 22;
+        int endDay = 28;
 
-        Calendar calendar = Calendar.getInstance();
+        calendar = Calendar.getInstance();
+
+
         //calendar.add(Calendar.MONTH, 1); // for now... Dr im will be running this in may not april...
+        flightsTab.click();
 
         for (int x = 0; x < destination.length; x++) {//{ 1; x++) {//
-            // Get to the right place
-            flightsTab.click();
+
+            System.out.println("\n\n\n\nThe valule of x is " + x);
             Thread.sleep(500);
 
             // Leaving from box
@@ -81,36 +82,30 @@ public class FlightDataAutomationTest {
             Actions a = new Actions(driver);
             a.sendKeys(Keys.ENTER).perform();
 
+            // Don't know why... but there's a button you need to press before the fly to element becomes visible?
+            WebElement goingToButton = driver.findElement(By.xpath("/html/body/div[1]/div[1]/div/div[1]/div/div[1]/div[1]/div/figure/div[3]/div/div/div/div[2]/div/form/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div/div/div/div/div[1]/button"));
+            goingToButton.click();
+
+            // Send to each place in our list
+            WebElement flyTo = driver.findElement(By.xpath("//*[@id=\"location-field-leg1-destination\"]"));
+            System.out.println("I am typing " + destination[x] + " for the desination\n\n\n");
+            flyTo.sendKeys(destination[x]);
+            Thread.sleep(1000);
+            a.sendKeys(Keys.ENTER).perform();
+
             // Begin date loop
-            int daysInCurrentMonth = calendar.getMaximum(Calendar.DAY_OF_MONTH);
-            System.out.println("I am running the for loop " + (daysInCurrentMonth - 7) + " times for the month " + calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()));
-
-            // [Total # of days in month - end day]
-            // **While debugging its much faster to start at a later date in the month...
-            // I realized this a bit late but it will save a ton of time.
-            // When the core logic we're working on is complete just switch out the commented lines**
             //for (int i = 0; i < (daysInCurrentMonth - 7); i++) {
-            for  (int i = 18; i < (daysInCurrentMonth - 7); i++) {
-                System.out.println("Value of i is " + i);
-                // Don't know why... but there's a button you need to press before the fly to element becomes visible?
-                WebElement goingToButton = driver.findElement(By.xpath("/html/body/div[1]/div[1]/div/div[1]/div/div[1]/div[1]/div/figure/div[3]/div/div/div/div[2]/div/form/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div/div/div/div/div[1]/button"));
-                goingToButton.click();
+            for  (int i = 21; i < (getNumTimesToRunForMonth() - 6); i++) { // we want it to run an extra time to hit the if endday + 1 > days in current block
 
-                // Send to each place in our list
-                WebElement flyTo = driver.findElement(By.xpath("//*[@id=\"location-field-leg1-destination\"]"));
-                //System.out.println("I am typing " + destination[x] + " for the desination");
-                flyTo.sendKeys(destination[x]);
-                Thread.sleep(1000);
-                a.sendKeys(Keys.ENTER).perform();
+                int daysInCurrentMonth = calendar.getMaximum(Calendar.DAY_OF_MONTH);
 
-                // If we are running the loop for the first time....
-                // For debugging.. switch out the commented lines when ready to fully test
-                // if (i == 0) {
-                if (i == 18) {
-                    startDay = 18;//1;
-                    // make the end day one less then you want it to be... werid bug?
-                    endDay = 25;//7;
-                } else {
+                System.out.println("\nThe getNumTimesToRunForMonth(calendar) method returns " + (getNumTimesToRunForMonth()) + "for the month " + calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()));
+                System.out.println("I am running the for loop " + (getNumTimesToRunForMonth() - 21 - 6) + " times");
+
+                System.out.println("\nValue of i is " + i + "\n");
+
+                // If we are NOT running the loop for the first time....
+                if (i != 21) { // != 0
                     startDay++;
                     endDay++;
                 }
@@ -120,15 +115,19 @@ public class FlightDataAutomationTest {
                 WebElement monthName;
 
                 // If we are on the last iteration of [Whatever month's] date loop
-                if (endDay == (daysInCurrentMonth - 7)) {
+                System.out.println("end day + 1 = " + (endDay + 1) + " & getNumTimesToRunForMonth(calendar) = " + getNumTimesToRunForMonth());
+
+                if ((endDay + 1) > getNumTimesToRunForMonth()) {
+                    System.out.println("I have made it to the last iteration of the loop");
                     // Add 2x extra (empty) lines to the file for easier readability
                     FileUtils.writeStringToFile(new File("flightresults.txt"), "\n\n", StandardCharsets.UTF_8, true);
 
                     // This will help formatting.. easier to see sections while debugging
-                    System.out.println("\n\n" + "*************************************************************************************" +
-                            "I'm all done iterating through the dates in " + (calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()) + " so now I'm adding a month!"));
+                    System.out.println("\n\n" + "*************************************************************************************");
+                    System.out.println("I'm all done iterating through the dates in " + (calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()) + " so now I'm adding a month!"));
+                    System.out.println("Previously the month was " + calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()));
                     calendar.add(Calendar.MONTH, 1);
-                    System.out.println("The month is now " + calendar.get(Calendar.MONTH));
+                    System.out.println("The month is now " + calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()));
 
                     departingButton = driver.findElement(By.xpath("//*[@id=\"d1-btn\"]"));
                     departingButton.click();
@@ -170,15 +169,14 @@ public class FlightDataAutomationTest {
                     }
 
                     else {
-                        System.out.println("CONFIRMED! We are in the correct month");
+                        System.out.println("CONFIRMED! We are in ===>" + monthName.getText() + "<=== which is the correct month");
                     }
                     // Set Starting Day back to 1 since its a new month and begin process again (It should be hitting the startDay++ above and getting incremented in the new month)
-                    System.out.println("The End day + 1 is greater then " + daysInCurrentMonth + " and the end day is " + endDay);
                     //startDay = 1;
-                    startDay = 18;
+                    startDay = 21;
                     System.out.println("After moving months, the Start day is now " + startDay);
                     //endDay = 7;
-                    endDay = 25;
+                    endDay = 28;
                     System.out.println("After moving months, the End day is now " + endDay);
 
                     // This will help formatting.. easier to see sections while debugging
@@ -204,8 +202,12 @@ public class FlightDataAutomationTest {
                 // waits till element is visible
                 WebDriverWait wait = new WebDriverWait(driver, 20);
 
+                System.out.println("\nmonthName.getText() = " + monthName.getText());
+                System.out.println("fullMonthString = " + fullMonthString + "\n");
+
                 // "May 2021" "June 2021" "July 2021" "Aug 2021"
                 if (monthName.getText().equals(fullMonthString)) {
+                    System.out.println("The month text matches the month string");
 
                     if (monthName.getText().equals("June 2021")){
                         Thread.sleep(1000);
@@ -235,23 +237,26 @@ public class FlightDataAutomationTest {
 
                     // This runs regardless
                     List<WebElement> month = driver.findElements(By.className("uitk-date-picker-month"));
-
                     wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.className("uitk-new-date-picker-day")));
 
+                    // there might be disabled days? (like from previous month)
                     List<WebElement> days = month.get(0).findElements(By.className("uitk-new-date-picker-day"));
 
                     Thread.sleep(3000);
-                    // Again, we're starting at 18 for debugging... switch the commented line when  everything is done and ready to fully test
+                    // Again, we're starting at 21 for debugging... switch the commented line when  everything is done and ready to fully test
                     //for (int y = 0; x < days.size(); y++) {
-                    for (int y = 18; y < (days.size() + 1); y++) {
+                    System.out.println("\nThe y loop will run " + (daysInCurrentMonth - 21 - 6) + " times");
+                    for (int y = 21; y < (daysInCurrentMonth - 6); y++) {
+
                         // If we've found the first day... click on it along with the last day
-                        if (Integer.parseInt(days.get(y).getAttribute("data-day")) != (startDay - 1)) {
+                        System.out.println("The value of y is " + y);
+                        System.out.println((days.get(y).getAttribute("data-day")) + " is the text and " + (startDay + 1) + " is the target #");
+                        if (days.get(y).getAttribute("data-day").equals(String.valueOf((startDay + 1))) ) {
                             System.out.println(days.get(y).getAttribute("data-day") + " is the beginning day");
                             days.get(y).click();
                             Thread.sleep(2000);
-                            // Weird bug where it's one less?
-                            System.out.println(days.get(endDay - 1).getAttribute("data-day") + " is the end day");
-                            days.get(endDay - 1).click();
+                            System.out.println(days.get(endDay).getAttribute("data-day") + " is the end day");
+                            days.get(endDay).click();
                             break;
                         }
                     }
@@ -367,5 +372,12 @@ public class FlightDataAutomationTest {
                 cheapTicketsButton.click();
             }
         }
+    }
+
+    public int getNumTimesToRunForMonth() {
+        String currentMonth = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
+        int daysInMonth = calendar.getMaximum(calendar.get(Calendar.DAY_OF_MONTH));
+        System.out.println("\n**The month is " + currentMonth + " and I am running the loop "  + daysInMonth + " times**\n\n");
+        return daysInMonth;
     }
 }
