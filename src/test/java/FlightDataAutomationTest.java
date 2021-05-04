@@ -1,5 +1,6 @@
 import org.apache.commons.io.FileUtils;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -65,7 +66,7 @@ public class FlightDataAutomationTest {
 
         for (int x = 0; x < destination.length; x++) {//{ 1; x++) {//
 
-            System.out.println("\n\nThe valule of x is " + x);
+            System.out.println("\n\nThe value of x is " + x);
             Thread.sleep(500);
 
             // Leaving from box
@@ -97,7 +98,7 @@ public class FlightDataAutomationTest {
                 int daysInCurrentMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
                 //for (int i = 0; i < (daysInCurrentMonth - 7); i++) {
-                for (int i = 1; i < (daysInCurrentMonth - 6); i++) { // this will run the EXACT needed amt of times per month
+                for (int i = 10; i < (daysInCurrentMonth - 6); i++) { // this will run the EXACT needed amt of times per month
 
 
 
@@ -122,7 +123,7 @@ public class FlightDataAutomationTest {
                     if ((z) > 0) {
                         System.out.println("I will attempt to move to the next month");
                         // Add 2x extra (empty) lines to the file for easier readability
-                        FileUtils.writeStringToFile(new File("flightresults.txt"), "\n\n", StandardCharsets.UTF_8, true);
+                        //FileUtils.writeStringToFile(new File("flightresults.txt"), "\n\n", StandardCharsets.UTF_8, true);
 
                         // This will help formatting.. easier to see sections while debugging
                         System.out.println("\n\n" + "*************************************************************************************");
@@ -184,7 +185,7 @@ public class FlightDataAutomationTest {
                         // This opens the calendar
                         departingButton = driver.findElement(By.xpath("//*[@id=\"d1-btn\"]"));
                         departingButton.click();
-                        Thread.sleep(1000);
+                        Thread.sleep(2000);
                     }
 
                     // Begin Date manipulation
@@ -372,4 +373,16 @@ public class FlightDataAutomationTest {
         //System.out.println("\n**The month is " + currentMonth + " and I am running the loop "  + daysInMonth + " times**\n\n");
         return daysInMonth;
     }
+
+    @Test
+    public void findCheapestTest() throws IOException{
+        FindCheapest findCheapest = new FindCheapest();
+
+        findCheapest.readIn();
+
+        System.out.println(findCheapest.getCheapestOverall());
+
+
+    }
+
 }

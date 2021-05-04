@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4a6925af-5c0b-4dee-ab61-7d3e55822032" name="Default Changelist" comment="Basic project structure, skeleton files">
+      <change afterPath="$PROJECT_DIR$/src/main/java/FindCheapest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/FlightDataAutomation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/FlightDataAutomation.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/FlightDataAutomationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/FlightDataAutomationTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
