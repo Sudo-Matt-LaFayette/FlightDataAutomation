@@ -56,8 +56,8 @@ public class FlightDataAutomationTest {
         String[] destination = new String[]{"Cancun", "Las Vegas", "Denver", "Rome", "Milan", "Paris", "Madrid", "Amsterdam", "Singapore"};
         WebElement flightsTab = driver.findElement(By.xpath("/html/body/div[1]/div[1]/div/div[1]/div/div[1]/div[1]/div/figure/div[3]/div/div/ul/li[2]/a"));
 
-        int startDay = 21;
-        int endDay = 28;
+        int startDay = 10;
+        int endDay = 16;
         calendar = Calendar.getInstance();
 
         //calendar.add(Calendar.MONTH, 1); // for now... Dr im will be running this in may not april...
@@ -97,7 +97,7 @@ public class FlightDataAutomationTest {
                 int daysInCurrentMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
                 //for (int i = 0; i < (daysInCurrentMonth - 7); i++) {
-                for (int i = 21; i < (daysInCurrentMonth - 6); i++) { // this will run the EXACT needed amt of times per month
+                for (int i = 1; i < (daysInCurrentMonth - 6); i++) { // this will run the EXACT needed amt of times per month
 
 
 
@@ -107,7 +107,7 @@ public class FlightDataAutomationTest {
                     System.out.println("Value of i is " + i + "\n");
 
                     // If we are NOT running the loop for the first time....
-                    if (i != 21) { // != 0
+                    if (i != 10) { // != 0
                         startDay++;
                         endDay++;
                     }
@@ -170,10 +170,10 @@ public class FlightDataAutomationTest {
                         }
                         // Set Starting Day back to 1 since its a new month and begin process again (It should be hitting the startDay++ above and getting incremented in the new month)
                         //startDay = 1;
-                        startDay = 21;
+                        startDay = 1;
                         System.out.println("After moving months, the Start day is now " + startDay);
                         //endDay = 7;
-                        endDay = 28;
+                        endDay = 7;
                         System.out.println("After moving months, the End day is now " + endDay);
 
                         // This will help formatting.. easier to see sections while debugging
